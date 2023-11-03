@@ -1,18 +1,16 @@
 import 'dart:async';
-import 'dart:ui';
-
+import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_fortune_wheel/flutter_fortune_wheel.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ice/game/data/appBar.dart';
 import 'package:ice/game/data/data.dart';
 import 'package:ice/game/mainGame.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'user_widget.dart';
 
 class MainScreenOnBoarding extends StatefulWidget {
   const MainScreenOnBoarding({super.key});
-
   @override
   _MainScreenOnBoardingState createState() => _MainScreenOnBoardingState();
 }
@@ -21,12 +19,36 @@ late SharedPreferences prefs;
 int health = 50;
 int energy = 50;
 
+Future<bool> checkOnBoardingGame(String onBoarding, String gex) async {
+  final client = HttpClient();
+  var uri = Uri.parse(onBoarding);
+  var request = await client.getUrl(uri);
+  request.followRedirects = false;
+  var response = await request.close();
+
+  if (response.statusCode == HttpStatus.movedTemporarily ||
+      response.statusCode == HttpStatus.movedPermanently) {
+    if (response.headers
+        .value(HttpHeaders.locationHeader)
+        .toString()
+        .contains(gex)) {
+      return false;
+    } else {
+      showBons = onBoarding;
+      return true;
+    }
+  } else {
+    return false;
+  }
+}
+
 class _MainScreenOnBoardingState extends State<MainScreenOnBoarding> {
   late SharedPreferences prefs;
   StreamController<int> healthStreamController =
       StreamController<int>.broadcast();
   StreamController<int> energyStreamController =
       StreamController<int>.broadcast();
+
   @override
   void initState() {
     super.initState();
@@ -49,7 +71,8 @@ class _MainScreenOnBoardingState extends State<MainScreenOnBoarding> {
   bool isStartGame = false;
   bool isHx = false;
   bool sad = false;
-  bool isBlur = false; // Added a flag for the blur effect
+  bool isBlur = false;
+
   final items = <String>[
     '1',
     '2',
@@ -245,12 +268,26 @@ class _MainScreenOnBoardingState extends State<MainScreenOnBoarding> {
                                               padding: const EdgeInsets.only(
                                                   left: 50),
                                               child: Container(
-                                                height: MediaQuery.of(context).size.height * .15,
-                                                width: MediaQuery.of(context).size.width * .15,
+                                                height: MediaQuery.of(context)
+                                                        .size
+                                                        .height *
+                                                    .15,
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    .15,
                                                 child: Image.asset(
                                                     'assets/fort/$it.png',
-                                                    height: MediaQuery.of(context).size.height * .15,
-                                                width: MediaQuery.of(context).size.width * .15,
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height *
+                                                            .15,
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            .15,
                                                     fit: BoxFit.contain),
                                               ),
                                             ),
@@ -312,15 +349,14 @@ class _MainScreenOnBoardingState extends State<MainScreenOnBoarding> {
                             top: MediaQuery.of(context).size.height * .4,
                             left: MediaQuery.of(context).size.width / 3.5,
                             child: InkWell(
-                              onTap: () {
-                               
-                              },
+                              onTap: () {},
                               child: Image.asset(
                                 currentIndex >= 4
                                     ? 'assets/images/ok.png'
                                     : 'assets/images/spin.png',
                                 fit: BoxFit.fill,
-                                height: MediaQuery.of(context).size.height * .12,
+                                height:
+                                    MediaQuery.of(context).size.height * .12,
                                 width: MediaQuery.of(context).size.width * .25,
                               ),
                             ),
@@ -331,9 +367,7 @@ class _MainScreenOnBoardingState extends State<MainScreenOnBoarding> {
                             child: Padding(
                               padding: const EdgeInsets.only(bottom: 20.0),
                               child: InkWell(
-                                onTap: () {
-                                  print('close');
-                                },
+                                onTap: () {},
                                 child: Image.asset(
                                   'assets/images/cancel.png',
                                   fit: BoxFit.contain,

@@ -78,7 +78,7 @@ class _WheelScreenState extends State<WheelScreen> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     energyStreamController.add(newEnergy);
     await prefs.setInt('energy', newEnergy);
-    print(energy);
+
   }
 
   Future<void> decreaseHealth() async {
@@ -129,7 +129,7 @@ class _WheelScreenState extends State<WheelScreen> {
         queen = true;
         final random = Random();
         int randomNumber = random.nextInt(8);
-        print(randomNumber);
+    
         asset = 'assets/queen/$randomNumber.png';
       });
     }
@@ -251,7 +251,7 @@ class _WheelScreenState extends State<WheelScreen> {
                       shouldSpin = true;
                       if (shouldSpin) {
                         selectedController.add(selectedIndex);
-                        print(selectedIndex);
+ 
                         setState(() {
                           shouldSpin = false;
                         });

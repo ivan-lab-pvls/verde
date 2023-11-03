@@ -9,6 +9,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'data/slot.dart';
 import 'data/wheel.dart';
+import 'onBoarding/user_widget.dart';
 
 late SharedPreferences prefs;
 
@@ -83,6 +84,7 @@ class _MainGamePageState extends State<MainGamePage> {
   bool isShowSlot = false;
   bool isShowSettings = false;
   bool isMusicPlay = false;
+  bool isUser = false;
   int heartIndicator = 100;
   int energyIndicator = 100;
   @override
@@ -114,6 +116,28 @@ class _MainGamePageState extends State<MainGamePage> {
                 key: UniqueKey(),
                 fit: BoxFit.cover,
                 width: MediaQuery.of(context).size.width,
+              ),
+              Positioned(
+                left: MediaQuery.of(context).size.width / 1.2,
+                top: 30,
+                child: InkWell(
+                  onTap: () {
+                    setState(() {
+                      isUser = true;
+                    });
+                  },
+                  child: Container(
+                    height: MediaQuery.of(context).size.height * .05,
+                    width: MediaQuery.of(context).size.width * .1,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    child: Image.asset(
+                      'assets/images/user.png',
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                ),
               ),
               Container(
                 height: MediaQuery.of(context).size.height / 2,
@@ -191,7 +215,7 @@ class _MainGamePageState extends State<MainGamePage> {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   const SizedBox(
-                                    height: 80,
+                                    height: 90,
                                   ),
                                   Text(
                                     'Settings',
@@ -292,6 +316,14 @@ class _MainGamePageState extends State<MainGamePage> {
                       ],
                     ),
                   ),
+                ),
+              if (isUser)
+                UserScreen(
+                  onClosePressed: () {
+                    setState(() {
+                      isUser = false;
+                    });
+                  },
                 ),
               if (isShowRoulete)
                 WheelScreen(

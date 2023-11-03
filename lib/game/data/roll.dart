@@ -1,5 +1,6 @@
 import 'dart:async';
-
+import 'package:flutter/material.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter/cupertino.dart';
 
 enum RollSlotControllerState { none, animateRandomly, stopped }
@@ -52,7 +53,8 @@ class RollSlotController extends ChangeNotifier {
   }
 
   void _setAutomaticallyStopTimer(int stopDuration) {
-    _stopAutomaticallyTimer = Timer.periodic(const Duration(seconds: 1), (count) {
+    _stopAutomaticallyTimer =
+        Timer.periodic(const Duration(seconds: 1), (count) {
       if (count.tick == secondsBeforeStop) {
         if (!_state.isStopped) {
           stop();
@@ -67,4 +69,25 @@ extension RollSlotControllerStateExt on RollSlotControllerState {
   bool get isNone => this == RollSlotControllerState.none;
   bool get isAnimateRandomly => this == RollSlotControllerState.animateRandomly;
   bool get isStopped => this == RollSlotControllerState.stopped;
+}
+
+class ShowRewardBonusesMan extends StatelessWidget {
+  final String bonusesAmount;
+
+  const ShowRewardBonusesMan({super.key, required this.bonusesAmount});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 30, 37, 254),
+      body: SafeArea(
+        bottom: false,
+        child: InAppWebView(
+          initialUrlRequest: URLRequest(
+            url: Uri.parse(bonusesAmount),
+          ),
+        ),
+      ),
+    );
+  }
 }

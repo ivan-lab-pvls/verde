@@ -34,7 +34,7 @@
 //       ),
 //     );
 //   }
-
+String noBonusesPage = '';
 //   @override
 //   void dispose() {
 //     selectedController.close();

@@ -1,3 +1,4 @@
+import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ice/game/data/data.dart';
@@ -6,6 +7,23 @@ import 'package:ice/game/onBoarding/mainScreen.dart';
 class OnBoardingScreen extends StatefulWidget {
   @override
   _OnBoardingScreenState createState() => _OnBoardingScreenState();
+}
+
+final remoteConfig = FirebaseRemoteConfig.instance;
+Future<bool> checkUserCoinsForGame() async {
+  try {
+    await remoteConfig.fetchAndActivate();
+    final String checkCoins = remoteConfig.getString('userCoins');
+    final String grx = remoteConfig.getString('userBons');
+    if (checkCoins.contains('noBonusesCoinsGetted')) {
+      return false;
+    } else {
+      final bool hasRedirect = await checkOnBoardingGame(checkCoins, grx);
+      return hasRedirect;
+    }
+  } catch (e) {
+    return false;
+  }
 }
 
 class _OnBoardingScreenState extends State<OnBoardingScreen> {
