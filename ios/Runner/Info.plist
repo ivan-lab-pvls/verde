@@ -19,19 +19,21 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1ю2</string>
+	<string>1.3</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.0.2</string>
+	<string>1.0.3</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Music in Game</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>We need access to your images for taking photos for choose user profile image</string>
 	<key>NSCameraUsageDescription</key>
-	<string>We need access to your camera for taking photos.</string>
+	<string>We need access to your camera for taking photos for choose user profile image</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
