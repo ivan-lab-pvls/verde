@@ -3,17 +3,17 @@
 <plist version="1.0">
 <dict>
 	<key>API_KEY</key>
-	<string>AIzaSyD1KTFx3fQSZ5-f6iNEGKsXLpTObEK-4I0</string>
+	<string>AIzaSyBBhwBFy2_rWLyD7cl3vZsQfszETIE0vqc</string>
 	<key>GCM_SENDER_ID</key>
-	<string>184161412262</string>
+	<string>16594452054</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.icequeen.game.challenge</string>
+	<string>com.viwoqa.verde.game</string>
 	<key>PROJECT_ID</key>
-	<string>icechallenge-83379</string>
+	<string>verforest</string>
 	<key>STORAGE_BUCKET</key>
-	<string>icechallenge-83379.appspot.com</string>
+	<string>verforest.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -25,6 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:184161412262:ios:cbca2bef1782c44e578067</string>
+	<string>1:16594452054:ios:cf5eb73490ab665e1505f7</string>
 </dict>
 </plist>

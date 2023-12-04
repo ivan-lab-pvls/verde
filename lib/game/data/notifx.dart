@@ -1,11 +1,11 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:ice/game/data/notifications.dart';
+import 'package:verdeForest/game/data/notifications.dart';
 
-class NotificationServiceFb {
+class NotificationServverdeForestFb {
   late final FirebaseMessaging _messaging;
 
   PushNotification? _notificationInfo;
-  final localNoticeService = LocalNoticeService();
+  final localNotverdeForestServverdeForest = LocalNotverdeForestServverdeForest();
 
   activate() {
     registerNotification();
@@ -15,7 +15,7 @@ class NotificationServiceFb {
 
   void registerNotification() async {
     _messaging = FirebaseMessaging.instance;
-    localNoticeService.setup();
+    localNotverdeForestServverdeForest.setup();
 
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
@@ -30,8 +30,6 @@ class NotificationServiceFb {
      
 
       FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-        print(
-            'Message title: ${message.notification?.title}, body: ${message.notification?.body}, data: ${message.data}');
 
         _notificationInfo = PushNotification(
           title: message.notification?.title,
@@ -41,14 +39,13 @@ class NotificationServiceFb {
         );
 
         if (_notificationInfo != null) {
-          localNoticeService.addNotification(
+          localNotverdeForestServverdeForest.addNotification(
             _notificationInfo!.title ?? '',
             _notificationInfo!.body ?? '',
           );
         }
       });
     } else {
-      print('User declined or has not accepted permission');
     }
   }
 
@@ -79,7 +76,6 @@ class NotificationServiceFb {
 
   Future<void> _firebaseMessagingBackgroundHandler(
       RemoteMessage message) async {
-    print("Handling a background message: ${message.messageId}");
   }
 }
 

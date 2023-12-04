@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 
 class CustomAppBar extends StatelessWidget {
@@ -5,8 +7,8 @@ class CustomAppBar extends StatelessWidget {
   final Stream<int> energyStream;
   final VoidCallback onTap;
   final VoidCallback onClosePressed;
-  CustomAppBar(
-      {required this.healthStream,
+  const CustomAppBar(
+      {super.key, required this.healthStream,
       required this.energyStream,
       required this.onTap,
       required this.onClosePressed});
@@ -34,7 +36,7 @@ class CustomAppBar extends StatelessWidget {
               ),
               actions: [
                 // Energy Indicator
-                Container(
+                SizedBox(
                   height: 40,
                   width: MediaQuery.of(context).size.width * 0.35,
                   child: Center(
@@ -67,7 +69,7 @@ class CustomAppBar extends StatelessWidget {
                         ),
                         Align(
                           alignment: Alignment.centerLeft,
-                          child: Container(
+                          child: SizedBox(
                             height: 35,
                             width: 35,
                             child: Image.asset('assets/images/power.png'),
@@ -81,7 +83,7 @@ class CustomAppBar extends StatelessWidget {
                   width: 20,
                 ),
                 // Health Indicator
-                Container(
+                SizedBox(
                   height: 40,
                   width: MediaQuery.of(context).size.width * .35,
                   child: Center(
@@ -114,7 +116,7 @@ class CustomAppBar extends StatelessWidget {
                         ),
                         Align(
                           alignment: Alignment.centerLeft,
-                          child: Container(
+                          child: SizedBox(
                             height: 35,
                             width: 35,
                             child: Image.asset('assets/images/heart.png'),

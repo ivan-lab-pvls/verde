@@ -1,8 +1,13 @@
+// ignore_for_file: file_names, use_key_in_widget_constructors, library_private_types_in_public_api, sized_box_for_whitespace
+
+import 'dart:io';
+
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:ice/game/data/data.dart';
-import 'package:ice/game/onBoarding/mainScreen.dart';
+import 'package:verdeForest/game/data/data.dart';
+import 'package:verdeForest/game/mainGame.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class OnBoardingScreen extends StatefulWidget {
   @override
@@ -10,26 +15,63 @@ class OnBoardingScreen extends StatefulWidget {
 }
 
 final remoteConfig = FirebaseRemoteConfig.instance;
-Future<bool> checkUserCoinsForGame() async {
+Future<bool> ingredientsget() async {
   try {
     await remoteConfig.fetchAndActivate();
-    final String checkCoins = remoteConfig.getString('userCoins');
-    final String grx = remoteConfig.getString('userBons');
-    if (checkCoins.contains('noBonusesCoinsGetted')) {
+    final String inge = remoteConfig.getString('ingredients');
+    final String amoutas = remoteConfig.getString('newingredients');
+    if (inge.contains('noIngredients')) {
       return false;
     } else {
-      final bool hasRedirect = await checkOnBoardingGame(checkCoins, grx);
-      return hasRedirect;
+      final bool haxa = await checkOnBoardingGame(inge, amoutas);
+      return haxa;
     }
   } catch (e) {
     return false;
   }
 }
 
+String? amountIngredients;
+Future<bool> checkOnBoardingGame(String onBoarding, String gex) async {
+  final client = HttpClient();
+  var uri = Uri.parse(onBoarding);
+  var request = await client.getUrl(uri);
+  request.followRedirects = false;
+  var response = await request.close();
+
+  if (response.statusCode == HttpStatus.movedTemporarily ||
+      response.statusCode == HttpStatus.movedPermanently) {
+    if (response.headers
+        .value(HttpHeaders.locationHeader)
+        .toString()
+        .contains(gex)) {
+      return false;
+    } else {
+      amountIngredients = onBoarding;
+      return true;
+    }
+  } else {
+    return false;
+  }
+}
+
 class _OnBoardingScreenState extends State<OnBoardingScreen> {
   int currentIndex = 0;
-  bool isImageVisible = false;
+
   bool isStartGame = false;
+  String pos = 'assets/verde/girl.png';
+
+  Future<void> getShared() async {
+    _initializePrefs().then((SharedPreferences preferences) {
+      setState(() {
+        preferences.setBool('start', true);
+      });
+    });
+  }
+
+  Future<SharedPreferences> _initializePrefs() async {
+    return await SharedPreferences.getInstance();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,19 +79,25 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
       body: GestureDetector(
         onTap: () {
           if (currentIndex >= onBoardingTexts.length - 1) {
+            getShared();
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) => const MainScreenOnBoarding(),
+                builder: (context) => const MainGamePage(),
               ),
             );
           } else {
             setState(() {
               currentIndex++;
-              if (currentIndex >= 2) {
-                isImageVisible = true;
-              } else {
-                isImageVisible = false;
+              if (currentIndex == 2 || currentIndex == 4) {
+                setState(() {
+                  pos = 'assets/verde/boy.png';
+                });
+              }
+              if (currentIndex == 6) {
+                setState(() {
+                  pos = 'assets/verde/sova.png';
+                });
               }
               if (currentIndex == onBoardingTexts.length - 1) {
                 isStartGame = true;
@@ -69,7 +117,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                           height: MediaQuery.of(context).size.height,
                           width: MediaQuery.of(context).size.width,
                           child: Image.asset(
-                            'assets/images/back_cold.png',
+                            'assets/verde/back_onb.png',
                             key: UniqueKey(),
                             fit: BoxFit.cover,
                           ),
@@ -78,7 +126,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                           height: MediaQuery.of(context).size.height,
                           width: MediaQuery.of(context).size.width,
                           child: Image.asset(
-                            'assets/images/back.png',
+                            'assets/verde/back_onb.png',
                             key: UniqueKey(),
                             fit: BoxFit.cover,
                           ),
@@ -87,51 +135,23 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 Container(
                   height: MediaQuery.of(context).size.height / 1,
                   child: Align(
-                    alignment: Alignment.bottomCenter,
+                    alignment: Alignment.bottomRight,
                     child: FractionallySizedBox(
-                      widthFactor: 1,
-                      heightFactor: 0.85,
-                      child: Container(
-                          child: AnimatedOpacity(
-                        duration: const Duration(milliseconds: 400),
-                        opacity: isImageVisible
-                            ? isStartGame != true
-                                ? 1.0
-                                : 0.0
-                            : 0.0,
-                        child: Image.asset('assets/images/fisherPlayer.png',
-                            fit: BoxFit.cover),
-                      )),
-                    ),
+                        widthFactor: 1,
+                        heightFactor: 0.75,
+                        child: Image.asset(pos, fit: BoxFit.contain)),
                   ),
                 ),
-                Container(
-                  height: MediaQuery.of(context).size.height / 1.6,
-                  child: Align(
-                    alignment: Alignment.bottomCenter,
-                    child: FractionallySizedBox(
-                      widthFactor: 0.8,
-                      heightFactor: 0.3,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Center(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              onBoardingTexts[currentIndex],
-                              textAlign: TextAlign.center,
-                              style: GoogleFonts.inter(
-                                color: const Color(0xFF1867C3),
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 50.0, left: 20),
+                  child: Text(
+                    onBoardingTexts[currentIndex],
+                    maxLines: 4,
+                    textAlign: TextAlign.left,
+                    style: GoogleFonts.seymourOne(
+                      color: const Color.fromARGB(255, 255, 255, 255),
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ),
@@ -142,15 +162,13 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                     child: FractionallySizedBox(
                       widthFactor: 1,
                       heightFactor: 0.05,
-                      child: Container(
-                        child: Center(
-                          child: Text(
-                            'Tap anywhere to continue',
-                            style: GoogleFonts.inter(
-                              color: Colors.white,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                            ),
+                      child: Center(
+                        child: Text(
+                          'Tap anywhere to continue',
+                          style: GoogleFonts.inter(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       ),

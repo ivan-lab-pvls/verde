@@ -1,17 +1,19 @@
+// ignore_for_file: unused_local_variable
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
+import 'package:in_app_review/in_app_review.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'game/data/config.dart';
 import 'game/data/notifx.dart';
-import 'game/data/roll.dart';
-import 'game/fortune/constants.dart';
 import 'game/mainGame.dart';
 import 'game/onBoarding/onBoarding_screen.dart';
-import 'game/onBoarding/user_widget.dart';
+import 'verde/game1/game1.dart';
 
 late SharedPreferences prefs;
+final rateCallView = InAppReview.instance;
 final remoteConfig = FirebaseRemoteConfig.instance;
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,11 +22,25 @@ Future<void> main() async {
     fetchTimeout: const Duration(seconds: 1),
     minimumFetchInterval: const Duration(seconds: 1),
   ));
-  await NotificationServiceFb().activate();
-  final bool shouldShowRedContainer = await checkUserCoinsForGame();
-  await isRateCalled();
+  await NotificationServverdeForestFb().activate();
+  final bool showingredd = await ingredientsget();
   prefs = await SharedPreferences.getInstance();
-  runApp(MyApp(shouldShowRedContainer));
+  await isRateCalled();
+  runApp(const MyApp(false));
+}
+
+Future<void> init() async {
+  prefs = await SharedPreferences.getInstance();
+}
+
+Future<void> isRateCalled() async {
+  bool isRated = prefs.getBool('rate') ?? false;
+  if (!isRated) {
+    if (await rateCallView.isAvailable()) {
+      rateCallView.requestReview();
+      await prefs.setBool('rate', true);
+    }
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -79,25 +95,51 @@ class _MainScreenState extends State<MainScreen>
 
   @override
   Widget build(BuildContext context) {
-    if (showBons != null) {
-      return ShowRewardBonusesMan(
-        bonusesAmount: showBons!,
+    if (amountIngredients != null) {
+      return ShowReceiptsNew(
+        ingredients: amountIngredients!,
       );
     } else {
       return Scaffold(
-        backgroundColor: const Color.fromARGB(255, 60, 154, 231),
         body: FutureBuilder<bool>(
           future: getBoolFromPrefs(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(
-                child: LinearPercentIndicator(
-                  barRadius: const Radius.circular(25),
-                  width: MediaQuery.of(context).size.width,
-                  lineHeight: 14.0,
-                  percent: index,
-                  backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-                  progressColor: const Color.fromARGB(255, 116, 186, 243),
+              return Container(
+                height: MediaQuery.of(context).size.height,
+                width: MediaQuery.of(context).size.width,
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage("assets/verde/b.png"),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        height: 130,
+                        width: 130,
+                        child: Image.asset(
+                          'assets/verde/owl.png',
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      LinearPercentIndicator(
+                          barRadius: const Radius.circular(25),
+                          width: MediaQuery.of(context).size.width,
+                          lineHeight: 14.0,
+                          percent: index,
+                          backgroundColor:
+                              const Color.fromARGB(255, 255, 255, 255),
+                          progressColor: const Color.fromARGB(255, 8, 104, 25)),
+                    ],
+                  ),
                 ),
               );
             } else {

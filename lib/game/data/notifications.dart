@@ -5,16 +5,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:overlay_support/overlay_support.dart';
 
-class LocalNoticeService {
-  static final LocalNoticeService _notificationService =
-      LocalNoticeService._internal();
+class LocalNotverdeForestServverdeForest {
+  static final LocalNotverdeForestServverdeForest _notificationServverdeForest =
+      LocalNotverdeForestServverdeForest._internal();
 
   final _localNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
-  factory LocalNoticeService() {
-    return _notificationService;
+  factory LocalNotverdeForestServverdeForest() {
+    return _notificationServverdeForest;
   }
-  LocalNoticeService._internal();
+  LocalNotverdeForestServverdeForest._internal();
 
   Future<void> setup() async {
     const androidSetting = AndroidInitializationSettings('@mipmap/ic_launcher');
@@ -53,10 +53,10 @@ class LocalNoticeService {
       playSound: true,
       // groupKey: ,
       styleInformation:
-          MediaStyleInformation(htmlFormatTitle: true, htmlFormatContent: true),
+          const MediaStyleInformation(htmlFormatTitle: true, htmlFormatContent: true),
     );
 
-    final noticeDetail = NotificationDetails(
+    final notverdeForestDetail = NotificationDetails(
       iOS: iosDetail,
       android: androidDetail,
     );
@@ -68,14 +68,14 @@ class LocalNoticeService {
         id,
         title,
         body,
-        noticeDetail,
+        notverdeForestDetail,
       );
     } else {
       showSimpleNotification(
         Text(title),
         subtitle: Text(body),
         background: Colors.cyan.shade700,
-        duration: Duration(seconds: 6),
+        duration: const Duration(seconds: 6),
       );
     }
   }

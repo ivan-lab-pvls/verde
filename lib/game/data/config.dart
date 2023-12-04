@@ -23,6 +23,8 @@ class DefaultFirebaseOptions {
       );
     }
     switch (defaultTargetPlatform) {
+      case TargetPlatform.android:
+        return android;
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
@@ -47,14 +49,20 @@ class DefaultFirebaseOptions {
     }
   }
 
-
-
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyD1KTFx3fQSZ5-f6iNEGKsXLpTObEK-4I0',
-    appId: '1:184161412262:ios:cbca2bef1782c44e578067',
-    messagingSenderId: '184161412262',
-    projectId: 'icechallenge-83379',
-    storageBucket: 'icechallenge-83379.appspot.com',
-    iosBundleId: 'com.icequeen.game.challenge',
+    apiKey: 'AIzaSyBBhwBFy2_rWLyD7cl3vZsQfszETIE0vqc',
+    appId: '1:16594452054:ios:cf5eb73490ab665e1505f7',
+    messagingSenderId: '16594452054',
+    projectId: 'verforest',
+    storageBucket: 'verforest.appspot.com',
+    iosBundleId: 'com.viwoqa.verde.game',
+  );
+  static const FirebaseOptions android = FirebaseOptions(
+    apiKey: 'AIzaSyBBhwBFy2_rWLyD7cl3vZsQfszETIE0vqc',
+    appId: '1:16594452054:ios:cf5eb73490ab665e1505f7',
+    messagingSenderId: '16594452054',
+    projectId: 'verforest',
+    storageBucket: 'verforest.appspot.com',
+    iosBundleId: 'com.viwoqa.verde.game',
   );
 }

@@ -1,3 +1,5 @@
+// ignore_for_file: unused_field, library_private_types_in_public_api, prefer_typing_uninitialized_variables, unnecessary_string_interpolations
+
 import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
@@ -7,7 +9,7 @@ import 'package:image_picker/image_picker.dart'; // Добавим библио�
 class UserScreen extends StatefulWidget {
   final VoidCallback onClosePressed;
 
-  UserScreen({
+  const UserScreen({super.key, 
     required this.onClosePressed,
   });
 
@@ -22,6 +24,7 @@ class _UserScreenState extends State<UserScreen> {
   final StreamController<int> selectedController =
       StreamController<int>.broadcast();
 
+  // ignore: prefer_final_fields
   TextEditingController _usernameController = TextEditingController();
   String? _cachedUsername;
   var _userPhotoFile;
@@ -42,6 +45,7 @@ class _UserScreenState extends State<UserScreen> {
   }
 
   Future<void> _takeUserPhoto() async {
+    // ignore: no_leading_underscores_for_local_identifiers
     final ImagePicker _picker = ImagePicker();
     final XFile? image = await _picker.pickImage(source: ImageSource.camera);
 
@@ -114,12 +118,12 @@ class _UserScreenState extends State<UserScreen> {
                   future: _loadCachedUsername(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return CircularProgressIndicator();
+                      return const CircularProgressIndicator();
                     } else if (snapshot.hasError) {
                       return Text('Error: ${snapshot.error}');
                     } else {
                       final cachedUsername = snapshot.data;
-                      print(cachedUsername);
+                    
                       return cachedUsername != null
                           ? Center(
                               child: Text(
